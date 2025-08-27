@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.st11.salesnote.navigation.Screen
+import com.st11.salesnote.screens.components.AddSalePopUp
 import com.st11.salesnote.utils.DynamicStatusBar
 
 import compose.icons.FontAwesomeIcons
@@ -81,6 +82,8 @@ fun HomeScreen(navController: NavController) {
     }
 
     var items by remember { mutableStateOf(listOf(NamePriceItem())) }
+    var showPopup by remember { mutableStateOf(false) }
+    val total = items.sumOf { it.price.toDoubleOrNull() ?: 0.0 } // Calculate total
 
 
 
@@ -169,7 +172,7 @@ fun HomeScreen(navController: NavController) {
                 ) {
                     Button(
                         onClick = {
-                            navController.navigate(Screen.AddToWatchlist.route)
+                            showPopup = true
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -368,163 +371,6 @@ fun HomeScreen(navController: NavController) {
                         }
                     }
 
-//                    items.forEachIndexed { index, item ->
-//                        Column(
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .padding(horizontal = 16.dp)
-//                                .background(
-//                                    color = colorResource(id = R.color.jet),
-//                                    shape = RoundedCornerShape(12.dp)
-//                                )
-//                                .padding(16.dp)
-//                        ) {
-//
-//
-//                            OutlinedTextField(
-//                                value = item.name,
-//                                onValueChange = { newValue ->
-//                                    items = items.toMutableList().also {
-//                                        it[index] = it[index].copy(name = newValue)
-//                                    }
-//                                },
-//                                label = { Text("Item name *") },
-//                                modifier = Modifier.fillMaxWidth(),
-//                                colors = OutlinedTextFieldDefaults.colors(
-//                                    unfocusedContainerColor = Color.White.copy(alpha = 0.9f),
-//                                    focusedContainerColor = Color.White.copy(alpha = 0.95f),
-//                                    focusedBorderColor = backgroundColor,
-//                                    unfocusedBorderColor = Color.Gray,
-//                                    focusedLabelColor = backgroundColor,
-//                                    cursorColor = backgroundColor
-//                                ),
-//                                isError = item.name.isBlank() ,// highlight red if empty
-//                                singleLine = true,
-//                            )
-//
-//                            if (item.name.isBlank()) {
-//                                Text(
-//                                    text = "Name cannot be empty",
-//                                    color = Color.Red,
-//                                    fontSize = 12.sp
-//                                )
-//                            }
-//
-//                            Spacer(modifier = Modifier.height(8.dp))
-//
-//                            OutlinedTextField(
-//                                value = item.price,
-//                                onValueChange = { newValue ->
-//                                    items = items.toMutableList().also {
-//                                        it[index] = it[index].copy(price = newValue)
-//                                    }
-//                                },
-//                                label = { Text("Price") },
-//                                modifier = Modifier.fillMaxWidth(),
-//                                colors = OutlinedTextFieldDefaults.colors(
-//                                    unfocusedContainerColor = Color.White.copy(alpha = 0.9f),
-//                                    focusedContainerColor = Color.White.copy(alpha = 0.95f),
-//                                    focusedBorderColor = backgroundColor,
-//                                    unfocusedBorderColor = Color.Gray,
-//                                    focusedLabelColor = backgroundColor,
-//                                    cursorColor = backgroundColor
-//                                ),
-//                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-//                                isError = item.price.isBlank() || item.price.toDoubleOrNull() == null,
-//                                singleLine = true,
-//                            )
-//
-//
-//
-//                            if (item.price.isBlank() || item.price.toDoubleOrNull() == null) {
-//                                Text(
-//                                    text = "Enter a valid number",
-//                                    color = Color.Red,
-//                                    fontSize = 12.sp
-//                                )
-//                            }
-//
-//
-//                            OutlinedTextField(
-//                                value = item.quantity,
-//                                onValueChange = { newValue ->
-//                                    items = items.toMutableList().also {
-//                                        it[index] = it[index].copy(quantity = newValue)
-//                                    }
-//                                },
-//                                label = { Text("Quantity") },
-//                                modifier = Modifier.fillMaxWidth(),
-//                                colors = OutlinedTextFieldDefaults.colors(
-//                                    unfocusedContainerColor = Color.White.copy(alpha = 0.9f),
-//                                    focusedContainerColor = Color.White.copy(alpha = 0.95f),
-//                                    focusedBorderColor = backgroundColor,
-//                                    unfocusedBorderColor = Color.Gray,
-//                                    focusedLabelColor = backgroundColor,
-//                                    cursorColor = backgroundColor
-//                                ),
-//                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-//                                isError = item.price.isBlank() || item.price.toDoubleOrNull() == null,
-//                                singleLine = true,
-//                            )
-//
-//
-//
-//                            if (item.price.isBlank() || item.price.toIntOrNull() == null) {
-//                                Text(
-//                                    text = "Enter a valid number",
-//                                    color = Color.Red,
-//                                    fontSize = 12.sp
-//                                )
-//                            }
-//
-//
-//                            OutlinedTextField(
-//                                value = item.subTotal,
-//                                onValueChange = { newValue ->
-//                                    items = items.toMutableList().also {
-//                                        it[index] = it[index].copy(subTotal = newValue)
-//                                    }
-//                                },
-//                                label = { Text("Subtotal") },
-//                                modifier = Modifier.fillMaxWidth(),
-//                                colors = OutlinedTextFieldDefaults.colors(
-//                                    unfocusedContainerColor = Color.White.copy(alpha = 0.9f),
-//                                    focusedContainerColor = Color.White.copy(alpha = 0.95f),
-//                                    focusedBorderColor = backgroundColor,
-//                                    unfocusedBorderColor = Color.Gray,
-//                                    focusedLabelColor = backgroundColor,
-//                                    cursorColor = backgroundColor
-//                                ),
-//                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-//                                isError = item.price.isBlank() || item.price.toDoubleOrNull() == null,
-//                                singleLine = true,
-//                            )
-//
-//
-//
-//                            if (item.price.isBlank() || item.price.toDoubleOrNull() == null) {
-//                                Text(
-//                                    text = "Enter a valid number",
-//                                    color = Color.Red,
-//                                    fontSize = 12.sp
-//                                )
-//                            }
-//
-//
-//
-//                        }
-//                    }
-//
-//                    Button(
-//                        onClick = {
-//                            items = items + NamePriceItem() // Add a new empty field set
-//                        },
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .padding(horizontal = 16.dp)
-//                    ) {
-//                        Text("Add Item")
-//                    }
 
                     Button(
                         onClick = {
@@ -662,6 +508,16 @@ fun HomeScreen(navController: NavController) {
         }
 
     }
+
+
+    if (showPopup) {
+        AddSalePopUp(
+            onDismiss = { showPopup = false },
+            total = total,
+            items = items
+        )
+    }
+
 }
 
 
