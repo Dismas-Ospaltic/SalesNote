@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.st11.salesnote.screens.CreditAuthorScreen
 import com.st11.salesnote.screens.HomeScreen
+import com.st11.salesnote.screens.ReportsScreen
 import com.st11.salesnote.screens.SettingScreen
 import org.koin.androidx.compose.getViewModel
 
@@ -27,7 +28,7 @@ sealed class Screen(val route: String) {
 //        fun createRoute(itemId: String) = "eventDetail/$itemId"
 //    }
 
-    object AddToWatchlist : Screen("addToWatchlist")
+    object Reports : Screen("reports")
 
 
     object  CreditAuthor : Screen("CreditAuthor")
@@ -48,7 +49,7 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier) {
     ) {
         composable(Screen.Home.route) { HomeScreen(navController) }
         composable(Screen.Settings.route) { SettingScreen(navController) }
-//        composable(Screen.AddToWatchlist.route) { AddToWatchlistScreen(navController) }
+        composable(Screen.Reports.route) { ReportsScreen(navController) }
         composable(Screen.CreditAuthor.route) {  CreditAuthorScreen(navController)   }
 
 //        composable(Screen.EditCalendar.route) { backStackEntry ->

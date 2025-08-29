@@ -54,12 +54,15 @@ import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.regular.ThumbsUp
 import compose.icons.fontawesomeicons.regular.TrashAlt
 import compose.icons.fontawesomeicons.solid.CircleNotch
+import compose.icons.fontawesomeicons.solid.ClipboardList
 import compose.icons.fontawesomeicons.solid.Cog
 import compose.icons.fontawesomeicons.solid.Edit
 import compose.icons.fontawesomeicons.solid.InfoCircle
+import compose.icons.fontawesomeicons.solid.MoneyBillAlt
 import compose.icons.fontawesomeicons.solid.Pen
 import compose.icons.fontawesomeicons.solid.Plus
 import compose.icons.fontawesomeicons.solid.ShareAlt
+import compose.icons.fontawesomeicons.solid.Store
 import compose.icons.fontawesomeicons.solid.Users
 import org.koin.androidx.compose.koinViewModel
 
@@ -402,9 +405,9 @@ fun HomeScreen(navController: NavController) {
 
                 val icons = listOf(
 //                        "Call" to FontAwesomeIcons.Solid.Phone,
-                    "Share" to FontAwesomeIcons.Solid.ShareAlt,
-                    "Invite" to FontAwesomeIcons.Solid.Users,
-                    "Edit" to FontAwesomeIcons.Solid.Edit
+                    "Today Sales" to FontAwesomeIcons.Solid.Store,
+                    "Report" to FontAwesomeIcons.Solid.ClipboardList,
+                    "Cash Sales" to FontAwesomeIcons.Solid.MoneyBillAlt,
                 )
 
                 Row(
@@ -442,29 +445,25 @@ fun HomeScreen(navController: NavController) {
                                         onTap = {
                                             when (label) {
 
-                                                "Share" -> {
-
-                                                    val shareText = ""
-
-
+                                                "Today Sales" -> {
 
                                                 }
 
-                                                "Invite" -> {
-
+                                                "Report" -> {
+                                                      navController.navigate(Screen.Reports.route)
                                                     Toast.makeText(
                                                         context,
-                                                        "Invite Friends and family",
+                                                        "View Reports",
                                                         Toast.LENGTH_SHORT
                                                     ).show()
                                                 }
 
 
-                                                "Edit" -> {
+                                                "Cash Sales" -> {
 
                                                     Toast.makeText(
                                                         context,
-                                                        "Edit event details",
+                                                        "view Cash Sales",
                                                         Toast.LENGTH_SHORT
                                                     ).show()
                                                 }
