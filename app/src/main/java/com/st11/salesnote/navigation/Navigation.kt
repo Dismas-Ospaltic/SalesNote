@@ -18,15 +18,16 @@ import com.st11.salesnote.screens.CreditAuthorScreen
 import com.st11.salesnote.screens.HomeScreen
 import com.st11.salesnote.screens.ReportsScreen
 import com.st11.salesnote.screens.SettingScreen
+import com.st11.salesnote.screens.SingleSalesReportScreen
 import org.koin.androidx.compose.getViewModel
 
 sealed class Screen(val route: String) {
     object Home : Screen("home")
     object Settings : Screen("settings")
 
-//    object EditCalendar : Screen("editCalendar/{itemId}") {
-//        fun createRoute(itemId: String) = "eventDetail/$itemId"
-//    }
+    object SingleSalesReport : Screen("singleSalesReport/{itemId}") {
+        fun createRoute(itemId: String) = "SingleSalesReport/$itemId"
+    }
 
     object Reports : Screen("reports")
 
@@ -52,10 +53,10 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier) {
         composable(Screen.Reports.route) { ReportsScreen(navController) }
         composable(Screen.CreditAuthor.route) {  CreditAuthorScreen(navController)   }
 
-//        composable(Screen.EditCalendar.route) { backStackEntry ->
-//            val itemId = backStackEntry.arguments?.getString("itemId") ?: "Unknown"
-//            EditCalendarScreen(navController, itemId)
-//        }
+        composable(Screen.SingleSalesReport.route) { backStackEntry ->
+            val itemId = backStackEntry.arguments?.getString("itemId") ?: "Unknown"
+            SingleSalesReportScreen(navController, itemId)
+        }
 
 
 

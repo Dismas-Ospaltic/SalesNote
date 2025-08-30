@@ -1,6 +1,9 @@
 package com.st11.salesnote.screens
 
 
+
+
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -41,30 +44,33 @@ import compose.icons.fontawesomeicons.solid.ShareAlt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReportsScreen(navController: NavController) {
+fun SingleSalesReportScreen(navController: NavController, itemId: String?) {
     val backgroundColor = colorResource(id = R.color.raspberry)
     DynamicStatusBar(colorResource(id = R.color.white))
     // ✅ Define states for search
     var isSearching by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
+    val sheetState = rememberModalBottomSheetState()
+    var showSheet by remember { mutableStateOf(false) }
     var selectedNotes by remember { mutableStateOf("") }
 
 
 
     val context = LocalContext.current
 
-    val reports = listOf(
-        Report("2025-08-01", 620, 680, 590, 710, 4800f),
-        Report("2025-08-02", 650, 710, 605, 720, 4950f),
-        Report("2025-08-03", 670, 725, 615, 730, 5100f),
-        Report("2025-08-04", 640, 690, 600, 700, 4700f),
-        Report("2025-08-05", 680, 740, 620, 740, 5200f),
-        Report("2025-08-06", 660, 715, 610, 720, 5050f),
-        Report("2025-08-07", 675, 735, 625, 735, 5150f),
-        Report("2025-08-08", 662, 700, 600, 700, 5000f),
-        Report("2025-08-09", 685, 750, 630, 750, 5300f),
-        Report("2025-08-10", 695, 760, 640, 760, 5400f)
+    val sales = listOf(
+        Sales("674774777883", "cash", "2025-08-01", 590f, 500f, 90f),
+        Sales("674774777884", "mpesa", "2025-08-02", 750f, 700f, 50f),
+        Sales("674774777885", "cash", "2025-08-03", 620f, 620f, 0f),
+        Sales("674774777886", "credit", "2025-08-04", 820f, 700f, 120f),
+        Sales("674774777887", "cash", "2025-08-05", 400f, 400f, 0f),
+        Sales("674774777888", "mpesa", "2025-08-06", 910f, 850f, 60f),
+        Sales("674774777889", "cash", "2025-08-07", 660f, 600f, 60f),
+        Sales("674774777890", "mpesa", "2025-08-08", 590f, 500f, 90f),
+        Sales("674774777891", "credit", "2025-08-09", 720f, 650f, 70f),
+        Sales("674774777892", "cash", "2025-08-10", 810f, 780f, 30f)
     )
+
 
 
 
@@ -111,7 +117,7 @@ fun ReportsScreen(navController: NavController) {
 
             // Title
             Text(
-                text = "Reports",
+                text = "Sales",
                 modifier = Modifier
                     .padding(end = 16.dp, start = 16.dp),
                 style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
@@ -120,7 +126,7 @@ fun ReportsScreen(navController: NavController) {
 //                    Spacer(modifier = Modifier.height(8.dp))
             // Subtitle
             Text(
-                text = "View your Sales Reports here",
+                text = "View all Sales",
                 modifier = Modifier
                     .padding(end = 16.dp, start = 16.dp),
                 style = MaterialTheme.typography.bodyMedium,
@@ -143,8 +149,8 @@ fun ReportsScreen(navController: NavController) {
                         .fillMaxWidth()
                         .padding(12.dp)
                 ) {
-                    for (index in reports.indices) {
-                        val report = reports[index] // Access each book
+                    for (index in sales.indices) {
+                        val sale = sales[index] // Access each book
 
                         // Book row
                         Column(
@@ -156,7 +162,7 @@ fun ReportsScreen(navController: NavController) {
                         ) {
                             Spacer(Modifier.height(4.dp))
                             Text(
-                                text = report.date,
+                                text = sale.receipt,
                                 style = MaterialTheme.typography.titleMedium.copy(
                                     fontWeight = FontWeight.SemiBold
                                 )
@@ -164,29 +170,27 @@ fun ReportsScreen(navController: NavController) {
                             Spacer(Modifier.height(4.dp))
 
                             Text(
-                                text = "Totals Sales: ${report.total.toString()}",
+                                text = "on: ${sale.date}",
                             )
                             Spacer(Modifier.height(4.dp))
 
-//                            Row(
-//                                Modifier.fillMaxWidth(),
-//                                horizontalArrangement = Arrangement.SpaceBetween
-//                            ) {
+                            Row(
+                                Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
                                 Text(
-                                    "Cash Payments: ${report.cash}",
+                                    "Total Sales: ${sale.totalSales.toString()}",
                                     style = MaterialTheme.typography.bodyMedium
                                 )
-                            Spacer(Modifier.height(4.dp))
                                 Text(
-                                    "Bank Payments: ${report.bank}",
+                                    "total Paid: ${sale.totalPaid.toString()}",
                                     style = MaterialTheme.typography.bodyMedium
                                 )
-                            Spacer(Modifier.height(4.dp))
                                 Text(
-                                    "M-pesa payments: ${report.mpesa}",
+                                    "Change: ${sale.change.toString()}",
                                     style = MaterialTheme.typography.bodyMedium
                                 )
-//                            }
+                            }
                             Spacer(Modifier.height(4.dp))
 
                             Row(
@@ -195,9 +199,8 @@ fun ReportsScreen(navController: NavController) {
                             ) {
                                 IconButton(
                                     onClick = {
-                                        selectedNotes = report.date
-//                                        showSheet = true
-                                        navController.navigate("singleSalesReport/${report.date}")
+                                        selectedNotes = sale.date
+                                        showSheet = true
                                     },
                                     modifier = Modifier
                                         .size(56.dp) // total button size
@@ -214,7 +217,7 @@ fun ReportsScreen(navController: NavController) {
                         }
 
                         // Divider except after last item
-                        if (index < reports.lastIndex) {
+                        if (index < sales.lastIndex) {
                             HorizontalDivider(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -244,26 +247,169 @@ fun ReportsScreen(navController: NavController) {
     }
 
 
+    if (showSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showSheet = false },
+            sheetState = sheetState
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text("Additional Notes", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text(selectedNotes)
+                Spacer(modifier = Modifier.height(16.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+
+                            }
+                            .padding(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = FontAwesomeIcons.Solid.CircleNotch,
+                            contentDescription = "update",
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(text = "update Progress", fontSize = 16.sp)
+                    }
+
+                    // Edit Button
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+//                                showEditDialog = true
+                            }
+                            .padding(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = FontAwesomeIcons.Solid.Pen,
+                            contentDescription = "Edit",
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(text = "Edit", fontSize = 16.sp)
+                    }
+
+
+                    // Delete Button
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+
+                            }
+                            .padding(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = FontAwesomeIcons.Regular.TrashAlt,
+                            contentDescription = "Delete",
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(text = "Delete", fontSize = 16.sp)
+                    }
+
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+
+
+
+
+
+                            }
+                            .padding(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = FontAwesomeIcons.Solid.ShareAlt,
+                            contentDescription = "share",
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(text = "Share Watchlist", fontSize = 16.sp)
+                    }
+
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+
+                            }
+                            .padding(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = FontAwesomeIcons.Regular.ThumbsUp,
+                            contentDescription = "Mark as complete",
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(text = "Mark as complete", fontSize = 16.sp)
+                    }
+                }
+//                Button(
+//                    onClick = { showSheet = false },
+//                    modifier = Modifier.align(Alignment.End)
+//                ) {
+//                    Text("Close")
+//                }
+            }
+        }
+    }
+
+
+
+
+
+
+
 
 }
 
 
 
 // ✅ Local book model + list
-data class Report(
+
+
+data class Sales(
+    val receipt: String,
+    val salesType: String,
     val date: String,
-    val cash: Int,
-    val bank: Int,
-    val mpesa: Int,
-    val other: Int,
-    val total: Float
+    val totalPaid: Float,
+    val totalSales: Float,
+    val change: Float,
+
 )
+
+
+
 
 
 @Preview(showBackground = true)
 @Composable
-fun ReportsScreenPreview() {
-    ReportsScreen(navController = rememberNavController())
+fun SingleSalesReportScreenPreview() {
+    SingleSalesReportScreen(navController = rememberNavController(), itemId = "020")
 }
 
 

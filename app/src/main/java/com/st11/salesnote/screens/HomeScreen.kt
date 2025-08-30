@@ -47,6 +47,7 @@ import androidx.navigation.compose.rememberNavController
 import com.st11.salesnote.navigation.Screen
 import com.st11.salesnote.screens.components.AddSalePopUp
 import com.st11.salesnote.utils.DynamicStatusBar
+import com.st11.salesnote.utils.formatDate
 
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Regular
@@ -86,12 +87,14 @@ fun HomeScreen(navController: NavController) {
 
     var items by remember { mutableStateOf(listOf(NamePriceItem())) }
     var showPopup by remember { mutableStateOf(false) }
-    val total = items.sumOf { it.price.toDoubleOrNull() ?: 0.0 } // Calculate total
+    val total = items.sumOf { it.subTotal.toDoubleOrNull() ?: 0.0 } // Calculate total
 
 
 
     val context = LocalContext.current
 
+    val currentDate = System.currentTimeMillis()
+    val formattedTodayDate = formatDate(currentDate) // Should return "DD-MM-YYYY"
 
 
 
@@ -407,7 +410,7 @@ fun HomeScreen(navController: NavController) {
 //                        "Call" to FontAwesomeIcons.Solid.Phone,
                     "Today Sales" to FontAwesomeIcons.Solid.Store,
                     "Report" to FontAwesomeIcons.Solid.ClipboardList,
-                    "Cash Sales" to FontAwesomeIcons.Solid.MoneyBillAlt,
+//                    "Cash Sales" to FontAwesomeIcons.Solid.MoneyBillAlt,
                 )
 
                 Row(
@@ -422,9 +425,8 @@ fun HomeScreen(navController: NavController) {
 
                         Box(
                             modifier = Modifier
-                                .size(56.dp)
-                                .clip(CircleShape)
-//                                    .background(if (isHoveredShare) Color.LightGray.copy(alpha = 0.2f) else Color.Transparent)
+                                .padding(8.dp) // Optional: gives some spacing around it
+                                .clip(RoundedCornerShape(12.dp)) // Rounded corners instead of circle
                                 .background(
                                     if (isHoveredStates[label] == true)
                                         Color.LightGray.copy(alpha = 0.2f)
@@ -432,11 +434,6 @@ fun HomeScreen(navController: NavController) {
                                 )
                                 .pointerInput(Unit) {
                                     detectTapGestures(
-//                                            onPress = {
-//                                                isHoveredShare = true
-//                                                tryAwaitRelease()
-//                                                isHoveredShare = false
-//                                            },
                                         onPress = {
                                             isHoveredStates[label] = true
                                             tryAwaitRelease()
@@ -444,39 +441,35 @@ fun HomeScreen(navController: NavController) {
                                         },
                                         onTap = {
                                             when (label) {
-
                                                 "Today Sales" -> {
-
+                                                    // Action here
+                                                    navController.navigate("singleSalesReport/$formattedTodayDate")
                                                 }
-
                                                 "Report" -> {
-                                                      navController.navigate(Screen.Reports.route)
+                                                    navController.navigate(Screen.Reports.route)
                                                     Toast.makeText(
                                                         context,
                                                         "View Reports",
                                                         Toast.LENGTH_SHORT
                                                     ).show()
                                                 }
-
-
-                                                "Cash Sales" -> {
-
-                                                    Toast.makeText(
-                                                        context,
-                                                        "view Cash Sales",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                }
+//                                                "Cash Sales" -> {
+//                                                    Toast.makeText(
+//                                                        context,
+//                                                        "View Cash Sales",
+//                                                        Toast.LENGTH_SHORT
+//                                                    ).show()
+//                                                }
                                             }
                                         }
                                     )
-                                },
+                                }
+                                .padding(horizontal = 16.dp, vertical = 12.dp), // Adaptive padding
                             contentAlignment = Alignment.Center
                         ) {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center,
-                                modifier = Modifier.fillMaxSize()
+                                verticalArrangement = Arrangement.Center
                             ) {
                                 Icon(
                                     imageVector = icon,
@@ -493,6 +486,9 @@ fun HomeScreen(navController: NavController) {
                                 )
                             }
                         }
+
+
+
                     }
                 }
             }
