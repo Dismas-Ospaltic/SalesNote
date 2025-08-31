@@ -96,55 +96,15 @@ fun HomeScreen(navController: NavController) {
     val currentDate = System.currentTimeMillis()
     val formattedTodayDate = formatDate(currentDate) // Should return "DD-MM-YYYY"
 
-
-
-
-
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-//                    if (isSearching) {
-//                        TextField(
-//                            value = searchQuery,
-//                            onValueChange = { searchQuery = it },
-//                            placeholder = {
-//                                Text(
-//                                    "Search...",
-//                                    color = Color.White.copy(alpha = 0.7f)
-//                                )
-//                            },
-//                            singleLine = true,
-//                            colors = TextFieldDefaults.colors(
-//                                focusedContainerColor = Color.Transparent,
-//                                unfocusedContainerColor = Color.Transparent,
-//                                disabledContainerColor = Color.Transparent,
-//                                focusedTextColor = Color.White,
-//                                unfocusedTextColor = Color.White,
-//                                cursorColor = Color.White,
-//                                focusedIndicatorColor = Color.Transparent,
-//                                unfocusedIndicatorColor = Color.Transparent
-//                            ),
-//                            modifier = Modifier.fillMaxWidth()
-//                        )
-//
-//                    } else {
                         Text("Home", color = Color.White)
-//                    }
+
                 },
                 actions = {
-//                    IconButton(onClick = { isSearching = !isSearching }) {
-//                        Icon(
-//                            imageVector = if (isSearching) Icons.Default.Close else Icons.Default.Search,
-//                            contentDescription = "Search",
-//                            tint = Color.White,
-//                            modifier = Modifier.size(24.dp)
-//                        )
-//                    }
-//                    if (!isSearching) {
-
                         IconButton(onClick = {
-//                        isSearching = !isSearching
                             navController.navigate(Screen.Settings.route)
                         }) {
                             Icon(
@@ -154,9 +114,6 @@ fun HomeScreen(navController: NavController) {
                                 modifier = Modifier.size(24.dp)
                             )
                         }
-
-
-
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = backgroundColor, // dark green
@@ -178,7 +135,24 @@ fun HomeScreen(navController: NavController) {
                 ) {
                     Button(
                         onClick = {
-                            showPopup = true
+//                            showPopup = true
+                            // ✅ Validation
+                            // Validation: Ensure all fields are filled
+                            val hasEmptyFields = items.any {
+                                it.name.isBlank() ||
+                                        it.price.isBlank() || it.price.toDoubleOrNull() == null ||
+                                        it.quantity.isBlank() || it.quantity.toIntOrNull() == null
+                            }
+
+                            if (hasEmptyFields) {
+                                Toast.makeText(
+                                    context,
+                                    "Please fill all required fields (Name, Price, Quantity) before proceeding.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                showPopup = true
+                            }
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -256,9 +230,9 @@ fun HomeScreen(navController: NavController) {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 16.dp)
+                                .padding(horizontal = 8.dp)
                                 .background(
-                                    color = colorResource(id = R.color.jet),
+                                    color = colorResource(id = R.color.text_gray),
                                     shape = RoundedCornerShape(12.dp)
                                 )
                                 .padding(16.dp)
