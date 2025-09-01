@@ -25,7 +25,7 @@ interface SingleSaleDao {
     fun getAllSingleSale(): Flow<List<SingleSaleEntity>>
 
     @Query("SELECT * FROM single_sale WHERE date = :saleDate")
-    fun getSalesByDate(saleDate: String): Flow<SingleSaleEntity?>
+    fun getSalesByDate(saleDate: String): Flow<List<SingleSaleEntity>>
 
 
 

@@ -19,9 +19,7 @@ class SingleSaleRepository(private val singleSaleDao: SingleSaleDao) {
     fun getAllSingleSale(): Flow<List<SingleSaleEntity>> = singleSaleDao.getAllSingleSale()
 
 
-    fun getSalesByDate(saleDate: String): Flow<SingleSaleEntity?> {
-        return singleSaleDao.getSalesByDate(saleDate)
-    }
+    fun getSalesByDate(saleDate: String): Flow<List<SingleSaleEntity>> = singleSaleDao.getSalesByDate(saleDate)
 
 
 
