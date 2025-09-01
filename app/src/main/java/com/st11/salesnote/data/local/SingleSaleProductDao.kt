@@ -9,7 +9,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.st11.salesnote.model.SingleProductEntity
-import com.st11.salesnote.model.SingleSaleEntity
 import kotlinx.coroutines.flow.Flow
 
 //This interface defines the database operations.
@@ -24,7 +23,7 @@ interface SingleSaleProductDao {
 
 
     @Query("SELECT * FROM single_product WHERE date = :saleDate")
-    fun getSingleSalesByDate(saleDate: String): Flow<SingleProductEntity?>
+    fun getAllSingleSalesByDate(saleDate: String): Flow<List<SingleProductEntity>>
 
 //    @Query("SELECT * FROM watchlist ORDER BY timestamp DESC")
 //    fun getAllWatchList(): Flow<List<WatchListEntity>>

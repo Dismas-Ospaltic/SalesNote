@@ -29,24 +29,24 @@ interface SingleSaleDao {
 
 
 
-    @Query("SELECT * FROM watchlist WHERE watchlistId = :watchlistId")
-    fun getWatchListById(watchlistId: String): Flow<WatchListEntity?>
-
-    @Query("DELETE FROM watchlist WHERE watchlistId = :watchlistId")
-    suspend fun deleteWatchListById(watchlistId: String)
-
-    @Query("UPDATE watchlist SET watchListTitle = :watchListTile  , expectedCompleteDate = :expectedCompleteDate , link = :link , type = :type , notes = :notes , category = :category , noEpisodesPage = :noEpisodesPage WHERE watchlistId = :watchlistId")
-    suspend fun updateWatchlistById(watchlistId: String, watchListTile: String,expectedCompleteDate : String, link: String?, type: String, notes: String?, category: String, noEpisodesPage: Int): Int?
-
-    @Query("UPDATE watchlist SET watchlistStatus = :watchlistStatus  WHERE watchlistId = :watchlistId")
-    suspend fun updateWatchlistStatusById(watchlistId: String, watchlistStatus: String): Int?
-
-
-    @Query("UPDATE watchlist SET status = :status  WHERE watchlistId = :watchlistId")
-    suspend fun updateStatusById(watchlistId: String, status: String): Int?
-
-    @Query("UPDATE watchlist SET seenPageEpisode = :seenPageEpisode  WHERE watchlistId = :watchlistId")
-    suspend fun updateSeenPageEpisodeById(watchlistId: String, seenPageEpisode: Int): Int?
+//    @Query("SELECT * FROM watchlist WHERE watchlistId = :watchlistId")
+//    fun getWatchListById(watchlistId: String): Flow<WatchListEntity?>
+//
+//    @Query("DELETE FROM watchlist WHERE watchlistId = :watchlistId")
+//    suspend fun deleteWatchListById(watchlistId: String)
+//
+//    @Query("UPDATE watchlist SET watchListTitle = :watchListTile  , expectedCompleteDate = :expectedCompleteDate , link = :link , type = :type , notes = :notes , category = :category , noEpisodesPage = :noEpisodesPage WHERE watchlistId = :watchlistId")
+//    suspend fun updateWatchlistById(watchlistId: String, watchListTile: String,expectedCompleteDate : String, link: String?, type: String, notes: String?, category: String, noEpisodesPage: Int): Int?
+//
+//    @Query("UPDATE watchlist SET watchlistStatus = :watchlistStatus  WHERE watchlistId = :watchlistId")
+//    suspend fun updateWatchlistStatusById(watchlistId: String, watchlistStatus: String): Int?
+//
+//
+//    @Query("UPDATE watchlist SET status = :status  WHERE watchlistId = :watchlistId")
+//    suspend fun updateStatusById(watchlistId: String, status: String): Int?
+//
+//    @Query("UPDATE watchlist SET seenPageEpisode = :seenPageEpisode  WHERE watchlistId = :watchlistId")
+//    suspend fun updateSeenPageEpisodeById(watchlistId: String, seenPageEpisode: Int): Int?
 
 
 }
