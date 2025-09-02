@@ -4,11 +4,13 @@ package com.st11.salesnote.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.st11.salesnote.model.DailySalesReport
 import com.st11.salesnote.model.SingleProductEntity
 import com.st11.salesnote.model.SingleSaleEntity
 import com.st11.salesnote.repository.SingleSaleRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -67,6 +69,28 @@ class SingleSaleViewModel(private val singleSaleRepository: SingleSaleRepository
             }
         }
     }
+
+
+
+
+
+    // StateFlow to expose daily sales reports
+    private val _dailySalesReports = MutableStateFlow<List<DailySalesReport>>(emptyList())
+    val dailySalesReports: StateFlow<List<DailySalesReport>> = _dailySalesReports.asStateFlow()
+
+    init {
+        // Start collecting reports immediately when ViewModel is created
+        viewModelScope.launch {
+            singleSaleRepository.getDailySalesReports()
+                .collect { reports ->
+                    _dailySalesReports.value = reports
+                }
+        }
+    }
+
 }
+
+
+
 
 

@@ -1,6 +1,7 @@
 package com.st11.salesnote.screens
 
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,6 +21,7 @@ import com.st11.salesnote.R
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.st11.salesnote.utils.DynamicStatusBar
+import com.st11.salesnote.viewmodel.SingleSaleViewModel
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Regular
 import compose.icons.fontawesomeicons.Solid
@@ -37,6 +40,7 @@ import compose.icons.fontawesomeicons.solid.CircleNotch
 import compose.icons.fontawesomeicons.solid.InfoCircle
 import compose.icons.fontawesomeicons.solid.Pen
 import compose.icons.fontawesomeicons.solid.ShareAlt
+import org.koin.androidx.compose.koinViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,6 +52,11 @@ fun ReportsScreen(navController: NavController) {
     var isSearching by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
     var selectedNotes by remember { mutableStateOf("") }
+
+    val singleSaleViewModel: SingleSaleViewModel = koinViewModel()
+   val dailyReports = singleSaleViewModel.dailySalesReports.collectAsState()
+
+
 
 
 
@@ -143,8 +152,36 @@ fun ReportsScreen(navController: NavController) {
                         .fillMaxWidth()
                         .padding(12.dp)
                 ) {
-                    for (index in reports.indices) {
-                        val report = reports[index] // Access each book
+//                    for (index in reports.indices) {
+//                        val report = reports[index] // Access each book
+
+                    if (dailyReports.value.isEmpty()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.watchingamovie), // Replace with your image in res/drawable
+                                    contentDescription = "No Data",
+                                    modifier = Modifier.size(120.dp)
+                                )
+                                Spacer(modifier = Modifier.height(12.dp))
+                                Text(
+                                    text = "No data available!",
+                                    color = Color.Gray,
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            }
+                        }
+                    }else{
+
+
+                    for (index in dailyReports.value.indices) {
+                        val report = dailyReports.value[index] // Access each book
 
                         // Book row
                         Column(
@@ -172,20 +209,20 @@ fun ReportsScreen(navController: NavController) {
 //                                Modifier.fillMaxWidth(),
 //                                horizontalArrangement = Arrangement.SpaceBetween
 //                            ) {
-                                Text(
-                                    "Cash Payments: ${report.cash}",
-                                    style = MaterialTheme.typography.bodyMedium
-                                )
+                            Text(
+                                "Cash Payments: ${report.cash}",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
                             Spacer(Modifier.height(4.dp))
-                                Text(
-                                    "Bank Payments: ${report.bank}",
-                                    style = MaterialTheme.typography.bodyMedium
-                                )
+                            Text(
+                                "Bank Payments: ${report.bank}",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
                             Spacer(Modifier.height(4.dp))
-                                Text(
-                                    "M-pesa payments: ${report.mpesa}",
-                                    style = MaterialTheme.typography.bodyMedium
-                                )
+                            Text(
+                                "M-pesa payments: ${report.mpesa}",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
 //                            }
                             Spacer(Modifier.height(4.dp))
 
@@ -224,13 +261,7 @@ fun ReportsScreen(navController: NavController) {
                             )
                         }
                     }
-
-
-
-
-
-
-
+                }
 
 
 

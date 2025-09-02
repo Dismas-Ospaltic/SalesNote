@@ -8,6 +8,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.st11.salesnote.model.DailySalesReport
 import com.st11.salesnote.model.SingleSaleEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -26,6 +27,22 @@ interface SingleSaleDao {
 
     @Query("SELECT * FROM single_sale WHERE date = :saleDate")
     fun getSalesByDate(saleDate: String): Flow<List<SingleSaleEntity>>
+
+
+
+    @Query("""
+    SELECT 
+        date,
+        SUM(CASE WHEN saleType = 'Cash' THEN totalPaid ELSE 0 END) AS cash,
+        SUM(CASE WHEN saleType = 'Bank' THEN totalPaid ELSE 0 END) AS bank,
+        SUM(CASE WHEN saleType = 'M-pesa' THEN totalPaid ELSE 0 END) AS mpesa,
+        SUM(CASE WHEN saleType NOT IN ('Cash','Bank','M-pesa') THEN totalPaid ELSE 0 END) AS other,
+        SUM(totalPaid) AS total
+    FROM single_sale
+    GROUP BY date
+    ORDER BY date ASC
+""")
+    fun getDailySalesReports(): Flow<List<DailySalesReport>>
 
 
 

@@ -1,6 +1,7 @@
 package com.st11.salesnote.repository
 
 import com.st11.salesnote.data.local.SingleSaleDao
+import com.st11.salesnote.model.DailySalesReport
 import com.st11.salesnote.model.SingleSaleEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -21,6 +22,25 @@ class SingleSaleRepository(private val singleSaleDao: SingleSaleDao) {
 
     fun getSalesByDate(saleDate: String): Flow<List<SingleSaleEntity>> = singleSaleDao.getSalesByDate(saleDate)
 
+
+//    fun getDailySalesReports(): Flow<List<DailySalesReport>> {
+//        return singleSaleDao.getDailySalesReports().map { dailySalesReports ->
+//            dailySalesReports.map { dailySalesReport ->
+//                DailySalesReport(
+//                    date = dailySalesReport.date,
+//                    cash = dailySalesReport.cash,
+//                    bank = dailySalesReport.bank,
+//                    mpesa = dailySalesReport.mpesa,
+//                    other = dailySalesReport.other,
+//                    total = dailySalesReport.total
+//                )
+//            }
+//        }
+//    }
+
+    fun getDailySalesReports(): Flow<List<DailySalesReport>> {
+        return singleSaleDao.getDailySalesReports()
+    }
 
 
 //    fun getAllWatchList(): Flow<List<WatchListEntity>> = watchListDao.getAllWatchList()
