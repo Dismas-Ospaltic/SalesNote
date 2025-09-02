@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.st11.salesnote.utils.DynamicStatusBar
+import com.st11.salesnote.viewmodel.SingleProductSaleViewModel
+import com.st11.salesnote.viewmodel.SingleSaleViewModel
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Regular
 import compose.icons.fontawesomeicons.Solid
@@ -40,6 +42,7 @@ import compose.icons.fontawesomeicons.solid.CircleNotch
 import compose.icons.fontawesomeicons.solid.InfoCircle
 import compose.icons.fontawesomeicons.solid.Pen
 import compose.icons.fontawesomeicons.solid.ShareAlt
+import org.koin.androidx.compose.koinViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,23 +57,34 @@ fun SingleSalesReportScreen(navController: NavController, itemId: String?) {
     var showSheet by remember { mutableStateOf(false) }
     var selectedNotes by remember { mutableStateOf("") }
 
+    val singleSaleViewModel: SingleSaleViewModel = koinViewModel()
+    val singleProductSaleViewModel: SingleProductSaleViewModel = koinViewModel()
+
+    val saleReceipt by singleProductSaleViewModel.salesSummary.collectAsState()
+    val products by singleProductSaleViewModel.productsForReceipt.collectAsState()
 
 
     val context = LocalContext.current
 
-    val sales = listOf(
-        Sales("674774777883", "cash", "2025-08-01", 590f, 500f, 90f),
-        Sales("674774777884", "mpesa", "2025-08-02", 750f, 700f, 50f),
-        Sales("674774777885", "cash", "2025-08-03", 620f, 620f, 0f),
-        Sales("674774777886", "credit", "2025-08-04", 820f, 700f, 120f),
-        Sales("674774777887", "cash", "2025-08-05", 400f, 400f, 0f),
-        Sales("674774777888", "mpesa", "2025-08-06", 910f, 850f, 60f),
-        Sales("674774777889", "cash", "2025-08-07", 660f, 600f, 60f),
-        Sales("674774777890", "mpesa", "2025-08-08", 590f, 500f, 90f),
-        Sales("674774777891", "credit", "2025-08-09", 720f, 650f, 70f),
-        Sales("674774777892", "cash", "2025-08-10", 810f, 780f, 30f)
-    )
+//    val sales = listOf(
+//        Sales("674774777883",  "2025-08-01", 590f, 500f, 90f),
+//        Sales("674774777884",  "2025-08-02", 750f, 700f, 50f),
+//        Sales("674774777885",  "2025-08-03", 620f, 620f, 0f),
+//        Sales("674774777886",  "2025-08-04", 820f, 700f, 120f),
+//        Sales("674774777887",  "2025-08-05", 400f, 400f, 0f),
+//        Sales("674774777888",  "2025-08-06", 910f, 850f, 60f),
+//        Sales("674774777889",  "2025-08-07", 660f, 600f, 60f),
+//        Sales("674774777890",  "2025-08-08", 590f, 500f, 90f),
+//        Sales("674774777891",  "2025-08-09", 720f, 650f, 70f),
+//        Sales("674774777892",  "2025-08-10", 810f, 780f, 30f)
+//    )
 
+    LaunchedEffect(Unit) {
+
+        if(itemId != null) {
+            singleProductSaleViewModel.loadSalesByDate(itemId)
+        }
+    }
 
 
 
@@ -149,9 +163,16 @@ fun SingleSalesReportScreen(navController: NavController, itemId: String?) {
                         .fillMaxWidth()
                         .padding(12.dp)
                 ) {
-                    for (index in sales.indices) {
-                        val sale = sales[index] // Access each book
+//                    for (index in sales.indices) {
+//                        for (index in saleReceipt.value.indices){
+//                    items(sales) { sale ->
+//                    for (index in saleReceipt){
+//                        val sale = saleReceipt[index] // Access each book
 
+
+                    // Iterate over sales when not empty
+                    for (index in saleReceipt.indices) {
+                        val sale = saleReceipt[index]
                         // Book row
                         Column(
                             modifier = Modifier
@@ -182,14 +203,14 @@ fun SingleSalesReportScreen(navController: NavController, itemId: String?) {
                                     "Total Sales: ${sale.totalSales.toString()}",
                                     style = MaterialTheme.typography.bodyMedium
                                 )
-                                Text(
-                                    "total Paid: ${sale.totalPaid.toString()}",
-                                    style = MaterialTheme.typography.bodyMedium
-                                )
-                                Text(
-                                    "Change: ${sale.change.toString()}",
-                                    style = MaterialTheme.typography.bodyMedium
-                                )
+//                                Text(
+//                                    "total Paid: ${sale.totalPaid.toString()}",
+//                                    style = MaterialTheme.typography.bodyMedium
+//                                )
+//                                Text(
+//                                    "Change: ${sale.change.toString()}",
+//                                    style = MaterialTheme.typography.bodyMedium
+//                                )
                             }
                             Spacer(Modifier.height(4.dp))
 
@@ -200,6 +221,7 @@ fun SingleSalesReportScreen(navController: NavController, itemId: String?) {
                                 IconButton(
                                     onClick = {
                                         selectedNotes = sale.date
+                                        singleProductSaleViewModel.loadProductsByReceipt(sale.receipt)
                                         showSheet = true
                                     },
                                     modifier = Modifier
@@ -217,7 +239,7 @@ fun SingleSalesReportScreen(navController: NavController, itemId: String?) {
                         }
 
                         // Divider except after last item
-                        if (index < sales.lastIndex) {
+                        if (index < saleReceipt.lastIndex) {
                             HorizontalDivider(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -269,104 +291,50 @@ fun SingleSalesReportScreen(navController: NavController, itemId: String?) {
                 ) {
 
 
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
+//                    Row(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .clickable {
+//
+//                            }
+//                            .padding(12.dp),
+//                        verticalAlignment = Alignment.CenterVertically
+//                    ) {
+//                        Icon(
+//                            imageVector = FontAwesomeIcons.Solid.CircleNotch,
+//                            contentDescription = "update",
+//                            modifier = Modifier.size(20.dp)
+//                        )
+//                        Spacer(modifier = Modifier.width(12.dp))
+//                        Text(text = "update Progress", fontSize = 16.sp)
+//                    }
+//
+//                    // Edit Button
+//                    Row(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .clickable {
+////                                showEditDialog = true
+//                            }
+//                            .padding(12.dp),
+//                        verticalAlignment = Alignment.CenterVertically
+//                    ) {
+//                        Icon(
+//                            imageVector = FontAwesomeIcons.Solid.Pen,
+//                            contentDescription = "Edit",
+//                            modifier = Modifier.size(20.dp)
+//                        )
+//                        Spacer(modifier = Modifier.width(12.dp))
+//                        Text(text = "Edit", fontSize = 16.sp)
+//                    }
 
-                            }
-                            .padding(12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = FontAwesomeIcons.Solid.CircleNotch,
-                            contentDescription = "update",
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Text(text = "update Progress", fontSize = 16.sp)
+                    if (products.isNotEmpty()) {
+                        Text("Items for selected receipt:")
+                        products.forEach {
+                            Text("${it.productName} - Qty: ${it.quantity} - Total: ${it.total}")
+                        }
                     }
 
-                    // Edit Button
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-//                                showEditDialog = true
-                            }
-                            .padding(12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = FontAwesomeIcons.Solid.Pen,
-                            contentDescription = "Edit",
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Text(text = "Edit", fontSize = 16.sp)
-                    }
-
-
-                    // Delete Button
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-
-                            }
-                            .padding(12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = FontAwesomeIcons.Regular.TrashAlt,
-                            contentDescription = "Delete",
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Text(text = "Delete", fontSize = 16.sp)
-                    }
-
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-
-
-
-
-
-                            }
-                            .padding(12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = FontAwesomeIcons.Solid.ShareAlt,
-                            contentDescription = "share",
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Text(text = "Share Watchlist", fontSize = 16.sp)
-                    }
-
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-
-                            }
-                            .padding(12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = FontAwesomeIcons.Regular.ThumbsUp,
-                            contentDescription = "Mark as complete",
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Text(text = "Mark as complete", fontSize = 16.sp)
-                    }
                 }
 //                Button(
 //                    onClick = { showSheet = false },
@@ -392,15 +360,21 @@ fun SingleSalesReportScreen(navController: NavController, itemId: String?) {
 // ✅ Local book model + list
 
 
+//data class Sales(
+//    val receipt: String,
+//    val date: String,
+//    val totalPaid: Float,
+//    val totalSales: Float,
+//    val change: Float,
+//
+//)
+
 data class Sales(
     val receipt: String,
-    val salesType: String,
     val date: String,
-    val totalPaid: Float,
-    val totalSales: Float,
-    val change: Float,
-
+    val totalSales: Float
 )
+
 
 
 

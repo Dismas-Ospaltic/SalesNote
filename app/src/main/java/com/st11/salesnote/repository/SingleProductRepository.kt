@@ -4,6 +4,7 @@ package com.st11.salesnote.repository
 
 import com.st11.salesnote.data.local.SingleSaleProductDao
 import com.st11.salesnote.model.SingleProductEntity
+import com.st11.salesnote.screens.Sales
 import kotlinx.coroutines.flow.Flow
 
 class SingleProductRepository(private val singleSaleProductDao: SingleSaleProductDao) {
@@ -18,6 +19,13 @@ class SingleProductRepository(private val singleSaleProductDao: SingleSaleProduc
     fun getSingleSalesByDate(saleDate: String): Flow<List<SingleProductEntity>> = singleSaleProductDao.getAllSingleSalesByDate(saleDate)
 
 
+  fun getSalesSummaryByDate(date: String): Flow<List<Sales>> {
+    return singleSaleProductDao.getSalesSummaryByDate(date)
+  }
+
+  fun getProductsByReceipt(receipt: String): Flow<List<SingleProductEntity>> {
+    return singleSaleProductDao.getProductsByReceipt(receipt)
+  }
 
 
 

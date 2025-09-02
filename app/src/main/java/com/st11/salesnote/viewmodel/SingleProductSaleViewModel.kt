@@ -6,8 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.st11.salesnote.model.SingleProductEntity
 import com.st11.salesnote.repository.SingleProductRepository
+import com.st11.salesnote.screens.Sales
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -42,6 +44,30 @@ class SingleProductSaleViewModel(private val singleProductRepository: SingleProd
         viewModelScope.launch {
            singleProductRepository.getSingleSalesByDate(saleDate).collectLatest { products ->
                 _singleProduct.value = products
+            }
+        }
+    }
+
+
+
+    private val _salesSummary = MutableStateFlow<List<Sales>>(emptyList())
+    val salesSummary: StateFlow<List<Sales>> = _salesSummary.asStateFlow()
+
+    private val _productsForReceipt = MutableStateFlow<List<SingleProductEntity>>(emptyList())
+    val productsForReceipt: StateFlow<List<SingleProductEntity>> = _productsForReceipt.asStateFlow()
+
+    fun loadSalesByDate(date: String) {
+        viewModelScope.launch {
+            singleProductRepository.getSalesSummaryByDate(date).collect {
+                _salesSummary.value = it
+            }
+        }
+    }
+
+    fun loadProductsByReceipt(receipt: String) {
+        viewModelScope.launch {
+            singleProductRepository.getProductsByReceipt(receipt).collect {
+                _productsForReceipt.value = it
             }
         }
     }
