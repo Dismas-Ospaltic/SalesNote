@@ -44,7 +44,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.st11.salesnote.R
+import com.st11.salesnote.model.SingleProductEntity
+import com.st11.salesnote.model.SingleSaleEntity
 import com.st11.salesnote.screens.NamePriceItem
+import com.st11.salesnote.utils.formatDate
+import com.st11.salesnote.viewmodel.SingleProductSaleViewModel
+import com.st11.salesnote.viewmodel.SingleSaleViewModel
+import org.koin.androidx.compose.koinViewModel
 
 //@OptIn(ExperimentalMaterial3Api::class)
 //@Composable
@@ -243,17 +249,27 @@ fun AddSalePopUp(
     var amountPaid by remember { mutableStateOf("") }
     var amountRemain by remember { mutableStateOf("") }
 
+    val singleSaleViewModel: SingleSaleViewModel = koinViewModel()
+    val singleProductSaleViewModel: SingleProductSaleViewModel = koinViewModel()
+
+
+    val currentDate = remember { System.currentTimeMillis() }
+    val formattedDate = formatDate(currentDate)
+
     // Error states
     var paymentMethodError by remember { mutableStateOf(false) }
     var amountPaidError by remember { mutableStateOf(false) }
 
     val paymentMethodType = listOf("Cash", "Bank", "M-pesa", "Paypal")
 
+    val idSales = generateTimestampBased10DigitNumber()
+
     // Automatically calculate change when amountPaid changes
     LaunchedEffect(amountPaid) {
         val paid = amountPaid.toDoubleOrNull() ?: 0.0
         val change = paid - total
-        amountRemain = if (change >= 0) change.toString() else "0"
+        amountRemain = change.toString()
+//        amountRemain = if (change >= 0) change.toString() else "0"
     }
 
     Dialog(onDismissRequest = { onDismiss() }) {
@@ -416,6 +432,36 @@ fun AddSalePopUp(
                         }
                         if (valid) {
                             // Proceed with saving
+                          singleSaleViewModel.insertSingleSale(SingleSaleEntity(
+                              date = formattedDate,
+                              receipt = idSales.toString(),
+                              saleType =  paymentMethod,
+                              description = salesDescription,
+                              totalSale = total.toFloat(),
+                              totalPaid = amountPaid.toFloat(),
+                              change = amountRemain.toFloat(),
+
+                          ))
+
+                            items.forEachIndexed { index, item ->
+
+                      // Text("${index + 1}. ${item.name} - ${item.price} :qty ${item.quantity}")
+
+                                singleProductSaleViewModel.insertSingleProduct(
+                                    SingleProductEntity(
+                                        date = formattedDate,
+                                        receipt = idSales.toString(),
+                                        productName = item.name,
+                                        price = item.price.toFloat(),
+                                        quantity = item.quantity.toInt(),
+                                        total = item.subTotal.toFloat(),
+                                        )
+                                )
+
+
+
+                            }
+                            onDismiss()
                         }
                     }) {
                         Text("Save")
