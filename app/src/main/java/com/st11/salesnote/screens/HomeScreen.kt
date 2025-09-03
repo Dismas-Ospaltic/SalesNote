@@ -135,6 +135,18 @@ fun HomeScreen(navController: NavController) {
                 ) {
                     Button(
                         onClick = {
+
+                            // ✅ Ensure at least one item exists
+                            if (items.isEmpty()) {
+                                Toast.makeText(
+                                    context,
+                                    "You must add at least one item before proceeding.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                return@Button
+                            }
+
+
 //                            showPopup = true
                             // ✅ Validation
                             // Validation: Ensure all fields are filled
@@ -143,6 +155,8 @@ fun HomeScreen(navController: NavController) {
                                         it.price.isBlank() || it.price.toDoubleOrNull() == null ||
                                         it.quantity.isBlank() || it.quantity.toIntOrNull() == null
                             }
+
+
 
                             if (hasEmptyFields) {
                                 Toast.makeText(
@@ -153,6 +167,7 @@ fun HomeScreen(navController: NavController) {
                             } else {
                                 showPopup = true
                             }
+
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -232,11 +247,26 @@ fun HomeScreen(navController: NavController) {
                                 .fillMaxWidth()
                                 .padding(horizontal = 8.dp)
                                 .background(
-                                    color = colorResource(id = R.color.text_gray),
+                                    color = colorResource(id = R.color.papaya_whip),
                                     shape = RoundedCornerShape(12.dp)
                                 )
                                 .padding(16.dp)
                         ) {
+                        // Remove Button
+                            Button(
+                                onClick = {
+                                    items = items.toMutableList().also { it.removeAt(index) }
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color.Red,
+                                    contentColor = Color.White
+                                ),
+                                shape = RoundedCornerShape(12.dp),
+                                modifier = Modifier.align(Alignment.End)
+                            ) {
+                                Text("Remove")
+                            }
+
 
                             // Item Name
                             OutlinedTextField(
@@ -481,7 +511,8 @@ fun HomeScreen(navController: NavController) {
 
     if (showPopup) {
         AddSalePopUp(
-            onDismiss = { showPopup = false },
+            onDismiss = { showPopup = false;    // Reset the list to only one empty item
+                items = listOf(NamePriceItem()) },
             total = total,
             items = items
         )

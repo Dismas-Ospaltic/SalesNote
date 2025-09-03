@@ -4,6 +4,7 @@ package com.st11.salesnote.screens
 
 
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -23,6 +24,7 @@ import com.st11.salesnote.R
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -169,7 +171,29 @@ fun SingleSalesReportScreen(navController: NavController, itemId: String?) {
 //                    for (index in saleReceipt){
 //                        val sale = saleReceipt[index] // Access each book
 
-
+                    if (saleReceipt.isEmpty()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.shop), // Replace with your image in res/drawable
+                                    contentDescription = "No Data",
+                                    modifier = Modifier.size(120.dp)
+                                )
+                                Spacer(modifier = Modifier.height(12.dp))
+                                Text(
+                                    text = "No data available!",
+                                    color = Color.Gray,
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            }
+                        }
+                    }else{
                     // Iterate over sales when not empty
                     for (index in saleReceipt.indices) {
                         val sale = saleReceipt[index]
@@ -249,7 +273,7 @@ fun SingleSalesReportScreen(navController: NavController, itemId: String?) {
                             )
                         }
                     }
-
+                }
 
 
 
