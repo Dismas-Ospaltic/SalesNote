@@ -64,7 +64,7 @@ fun SingleSalesReportScreen(navController: NavController, itemId: String?) {
 
     val saleReceipt by singleProductSaleViewModel.salesSummary.collectAsState()
     val products by singleProductSaleViewModel.productsForReceipt.collectAsState()
-
+    val singleSale by singleSaleViewModel.singleSale.collectAsState()
 
     val context = LocalContext.current
 
@@ -85,6 +85,7 @@ fun SingleSalesReportScreen(navController: NavController, itemId: String?) {
 
         if(itemId != null) {
             singleProductSaleViewModel.loadSalesByDate(itemId)
+            singleSaleViewModel.getSalesByDate(itemId)
         }
     }
 
@@ -194,96 +195,96 @@ fun SingleSalesReportScreen(navController: NavController, itemId: String?) {
                             }
                         }
                     }else{
-                    // Iterate over sales when not empty
-                    for (index in saleReceipt.indices) {
-                        val sale = saleReceipt[index]
-                        // Book row
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    // Handle click here if needed
-                                }
-                        ) {
-                            Spacer(Modifier.height(4.dp))
-                            Text(
-                                text = sale.receipt,
-                                style = MaterialTheme.typography.titleMedium.copy(
-                                    fontWeight = FontWeight.SemiBold
-                                )
-                            )
-                            Spacer(Modifier.height(4.dp))
-
-                            Text(
-                                text = "on: ${sale.date}",
-                            )
-                            Spacer(Modifier.height(4.dp))
-
-                            Row(
-                                Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Text(
-                                    "Total Sales: ${sale.totalSales.toString()}",
-                                    style = MaterialTheme.typography.bodyMedium
-                                )
-//                                Text(
-//                                    "total Paid: ${sale.totalPaid.toString()}",
-//                                    style = MaterialTheme.typography.bodyMedium
-//                                )
-//                                Text(
-//                                    "Change: ${sale.change.toString()}",
-//                                    style = MaterialTheme.typography.bodyMedium
-//                                )
-                            }
-                            Spacer(Modifier.height(4.dp))
-
-                            Row(
-                                Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Start
-                            ) {
-                                IconButton(
-                                    onClick = {
-                                        selectedNotes = sale.date
-                                        singleProductSaleViewModel.loadProductsByReceipt(sale.receipt)
-                                        showSheet = true
-                                    },
-                                    modifier = Modifier
-                                        .size(56.dp) // total button size
-                                        .clip(RoundedCornerShape(16.dp)) // round corners
-                                ) {
-                                    Icon(
-                                        imageVector = FontAwesomeIcons.Solid.InfoCircle,
-                                        contentDescription = "Info",
-                                        tint = colorResource(id = R.color.bittersweet),
-                                        modifier = Modifier.size(28.dp)
-                                    )
-                                }
-                            }
-                        }
-
-                        // Divider except after last item
-                        if (index < saleReceipt.lastIndex) {
-                            HorizontalDivider(
+                        // Iterate over sales when not empty
+                        for (index in singleSale.indices) {
+                            val sale = singleSale[index]
+                            // Book row
+                            Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(vertical = 8.dp),
-                                thickness = 1.dp,
-                                color = Color(0xFFE0E0E0)
-                            )
+                                    .clickable {
+                                        // Handle click here if needed
+                                    }
+                            ) {
+                                Spacer(Modifier.height(4.dp))
+                                Text(
+                                    text = sale.receipt,
+                                    style = MaterialTheme.typography.titleMedium.copy(
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                )
+                                Spacer(Modifier.height(4.dp))
+
+                                Text(
+                                    text = "Sale Type: ${sale.saleType}",
+                                )
+                                Spacer(Modifier.height(4.dp))
+
+                                Text(
+                                    text = "on: ${sale.date}",
+                                )
+                                Spacer(Modifier.height(4.dp))
+
+                                Row(
+                                    Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(
+                                        "Total Sales: ${sale.totalSale.toString()}",
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                }
+                                Spacer(Modifier.height(4.dp))
+                                Text(
+                                    "Total Paid: ${sale.totalPaid.toString()}",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                                Spacer(Modifier.height(4.dp))
+                                Text(
+                                    "Change: ${sale.change.toString()}",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                                Spacer(Modifier.height(4.dp))
+
+
+
+
+                                Row(
+                                    Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.Start
+                                ) {
+                                    IconButton(
+                                        onClick = {
+                                            selectedNotes = sale.description
+                                            singleProductSaleViewModel.loadProductsByReceipt(sale.receipt)
+                                            showSheet = true
+                                        },
+                                        modifier = Modifier
+                                            .size(56.dp) // total button size
+                                            .clip(RoundedCornerShape(16.dp)) // round corners
+                                    ) {
+                                        Icon(
+                                            imageVector = FontAwesomeIcons.Solid.InfoCircle,
+                                            contentDescription = "Info",
+                                            tint = colorResource(id = R.color.bittersweet),
+                                            modifier = Modifier.size(28.dp)
+                                        )
+                                    }
+                                }
+                            }
+
+                            // Divider except after last item
+                            if (index < saleReceipt.lastIndex) {
+                                HorizontalDivider(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 8.dp),
+                                    thickness = 1.dp,
+                                    color = Color(0xFFE0E0E0)
+                                )
+                            }
                         }
-                    }
                 }
-
-
-
-
-
-
-
-
-
-
 
                 }
             }

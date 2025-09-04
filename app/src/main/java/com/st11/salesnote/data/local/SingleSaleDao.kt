@@ -6,6 +6,7 @@ package com.st11.salesnote.data.local
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.Update
 import com.st11.salesnote.model.DailySalesReport
@@ -30,14 +31,15 @@ interface SingleSaleDao {
 
 
 
+
     @Query("""
     SELECT 
         date,
-        SUM(CASE WHEN saleType = 'Cash' THEN totalPaid ELSE 0 END) AS cash,
-        SUM(CASE WHEN saleType = 'Bank' THEN totalPaid ELSE 0 END) AS bank,
-        SUM(CASE WHEN saleType = 'M-pesa' THEN totalPaid ELSE 0 END) AS mpesa,
-        SUM(CASE WHEN saleType NOT IN ('Cash','Bank','M-pesa') THEN totalPaid ELSE 0 END) AS other,
-        SUM(totalPaid) AS total
+        SUM(CASE WHEN saleType = 'Cash' THEN totalSale ELSE 0 END) AS cash,
+        SUM(CASE WHEN saleType = 'Bank' THEN totalSale ELSE 0 END) AS bank,
+        SUM(CASE WHEN saleType = 'M-pesa' THEN totalSale ELSE 0 END) AS mpesa,
+        SUM(CASE WHEN saleType NOT IN ('Cash','Bank','M-pesa') THEN totalSale ELSE 0 END) AS other,
+        SUM(totalSale) AS total
     FROM single_sale
     GROUP BY date
     ORDER BY date ASC

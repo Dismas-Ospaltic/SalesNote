@@ -62,7 +62,7 @@ class SingleSaleViewModel(private val singleSaleRepository: SingleSaleRepository
 
 
 
-    private fun getSalesByDate(saleDate: String) {
+     fun getSalesByDate(saleDate: String) {
         viewModelScope.launch {
            singleSaleRepository.getSalesByDate(saleDate).collectLatest { products ->
                 _singleSale.value = products

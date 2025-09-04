@@ -72,7 +72,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HomeScreen(navController: NavController) {
     val backgroundColor = colorResource(id = R.color.raspberry)
-    DynamicStatusBar(colorResource(id = R.color.white))
+    DynamicStatusBar(colorResource(id = R.color.raspberry))
     // ✅ Define states for search
     var isSearching by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }

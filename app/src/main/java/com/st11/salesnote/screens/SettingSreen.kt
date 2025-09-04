@@ -2,6 +2,7 @@ package com.st11.salesnote.screens
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -59,7 +60,8 @@ fun SettingScreen(navController: NavController) {
                 )
             )
         },
-        containerColor = colorResource(id = R.color.raspberry)
+
+        containerColor = colorResource(id = R.color.light_bg_color)
     ) { paddingValues ->
 
         Column(
@@ -68,6 +70,7 @@ fun SettingScreen(navController: NavController) {
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp, vertical = 12.dp)
                 .verticalScroll(rememberScrollState()) // ✅ Scrollable content
+//                .background(colorResource(id = R.color.light_bg_color))
         ) {
 
             SettingCard(

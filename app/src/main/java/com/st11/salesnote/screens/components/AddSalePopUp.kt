@@ -43,6 +43,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.room.PrimaryKey
 import com.st11.salesnote.R
 import com.st11.salesnote.model.SingleProductEntity
 import com.st11.salesnote.model.SingleSaleEntity
@@ -248,6 +249,7 @@ fun AddSalePopUp(
     var paymentMethod by remember { mutableStateOf("") }
     var amountPaid by remember { mutableStateOf("") }
     var amountRemain by remember { mutableStateOf("") }
+    var totalSale by remember { mutableStateOf(0f) }
 
     val singleSaleViewModel: SingleSaleViewModel = koinViewModel()
     val singleProductSaleViewModel: SingleProductSaleViewModel = koinViewModel()
@@ -269,6 +271,7 @@ fun AddSalePopUp(
         val paid = amountPaid.toDoubleOrNull() ?: 0.0
         val change = paid - total
         amountRemain = change.toString()
+//        totalSale =
 //        amountRemain = if (change >= 0) change.toString() else "0"
     }
 
@@ -442,6 +445,7 @@ fun AddSalePopUp(
                               change = amountRemain.toFloat(),
 
                           ))
+
 
                             items.forEachIndexed { index, item ->
 

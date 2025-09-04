@@ -165,13 +165,13 @@ fun ReportsScreen(navController: NavController) {
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Image(
-                                    painter = painterResource(id = R.drawable.watchingamovie), // Replace with your image in res/drawable
+                                    painter = painterResource(id = R.drawable.shop), // Replace with your image in res/drawable
                                     contentDescription = "No Data",
                                     modifier = Modifier.size(120.dp)
                                 )
                                 Spacer(modifier = Modifier.height(12.dp))
                                 Text(
-                                    text = "No data available!",
+                                    text = "No data Sales available!",
                                     color = Color.Gray,
                                     style = MaterialTheme.typography.bodyMedium
                                 )
@@ -221,6 +221,11 @@ fun ReportsScreen(navController: NavController) {
                             Spacer(Modifier.height(4.dp))
                             Text(
                                 "M-pesa payments: ${report.mpesa}",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Spacer(Modifier.height(4.dp))
+                            Text(
+                                "Other payments: ${report.other}",
                                 style = MaterialTheme.typography.bodyMedium
                             )
 //                            }
