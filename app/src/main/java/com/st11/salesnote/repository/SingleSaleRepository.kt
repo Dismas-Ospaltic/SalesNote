@@ -4,7 +4,6 @@ import com.st11.salesnote.data.local.SingleSaleDao
 import com.st11.salesnote.model.DailySalesReport
 import com.st11.salesnote.model.SingleSaleEntity
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class SingleSaleRepository(private val singleSaleDao: SingleSaleDao) {
 

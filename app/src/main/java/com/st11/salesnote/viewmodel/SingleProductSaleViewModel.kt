@@ -1,7 +1,6 @@
 package com.st11.salesnote.viewmodel
 
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.st11.salesnote.model.SingleProductEntity

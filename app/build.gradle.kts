@@ -6,6 +6,8 @@ plugins {
 }
 
 android {
+    //com.st11.salesnote
+    //com.st11.salesnote
     namespace = "com.st11.salesnote"
     compileSdk = 36
 
@@ -61,29 +63,27 @@ dependencies {
 
 
 
-    //  this is for Material2 design
-    implementation("com.google.android.material:material:1.12.0")
 
     // Koin dependencies for dependency injection
     // Koin Core (required)
-    implementation("io.insert-koin:koin-android:3.5.0")
+    implementation("io.insert-koin:koin-android:4.1.1")
 
     // Koin for Jetpack Compose
-    implementation("io.insert-koin:koin-androidx-compose:3.5.0")
+    implementation("io.insert-koin:koin-androidx-compose:4.1.1")
 
     // Koin for Navigation in Jetpack Compose
     implementation("io.insert-koin:koin-androidx-navigation:3.5.0")
 
     // Lifecycle (to work with ViewModel)
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.4")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
 
     // Room dependencies
-    implementation("androidx.room:room-runtime:2.6.1")
-    ksp("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-runtime:2.8.1")
+    ksp("androidx.room:room-compiler:2.8.1")
 
     // For coroutine support (if you're using suspend functions in DAO)
-    implementation("androidx.room:room-ktx:2.6.1")
+    implementation("androidx.room:room-ktx:2.8.1")
 
 
     //animation
@@ -96,7 +96,7 @@ dependencies {
 
     //font Awesome Icons
     implementation("br.com.devsrsouza.compose.icons:font-awesome:1.1.1")
-
+//    implementation("org.webjars:font-awesome:7.0.1")
     // Accompanist Pager (for horizontal paging) paging
     implementation("com.google.accompanist:accompanist-pager:0.25.0")
 
@@ -109,17 +109,5 @@ dependencies {
     // Coroutine Support for Retrofit (if using suspend functions)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
-    // Lifecycle (to work with ViewModel)
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
 
-
-    //lottie file animations
-    implementation("com.github.LottieFiles:dotlottie-android:0.9.3")
-
-//    implementation("com.airbnb.android:lottie-compose:6.1.0")
-
-
-//json parsing
-    implementation("com.google.code.gson:gson:2.11.0")
 }

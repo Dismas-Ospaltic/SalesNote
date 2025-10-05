@@ -1,21 +1,16 @@
 package com.st11.salesnote.screens
 
 
-
-
-
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -23,18 +18,16 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.st11.salesnote.R
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.st11.salesnote.R
 import com.st11.salesnote.utils.DynamicStatusBar
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreditAuthorScreen(navController: NavController) {
+fun AboutAppScreen(navController: NavController) {
 
-    val backgroundColor = colorResource(id = R.color.raspberry)
+    val backgroundColor = colorResource(id = R.color.jet)
     DynamicStatusBar(backgroundColor) // ✅ Keeps status bar consistent
     val context = LocalContext.current
 
@@ -56,7 +49,7 @@ fun CreditAuthorScreen(navController: NavController) {
                 )
             )
         },
-        containerColor = colorResource(id = R.color.raspberry)
+        containerColor = colorResource(id = R.color.light_bg_color)
     ) { paddingValues ->
 
         Column(
@@ -68,6 +61,22 @@ fun CreditAuthorScreen(navController: NavController) {
         ) {
             // ✅ About Section
             Text(
+                text = "Sales Note App",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+
+            Text(
+                //set reminders,
+                text = "Version: 1.0.0",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(bottom = 24.dp)
+            )
+
+
+            // ✅ About Section
+            Text(
                 text = "About This App",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
@@ -76,9 +85,8 @@ fun CreditAuthorScreen(navController: NavController) {
 
             Text(
                 //set reminders,
-                text = "Keep track of everything you plan to watch or read with ease. Add titles, " +
-                        "track progress and" +
-                        " mark your favorite shows, books, and movies as completed—all in one place",
+                text = "Sales Note is a simple sales recording tool designed for shop owners, vendors, and seasonal business people. \n" +
+                        "It helps you keep track of your sales by allowing you to: Record sales by adding Item name, price and Quantity",
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(bottom = 24.dp)
             )
@@ -97,11 +105,10 @@ fun CreditAuthorScreen(navController: NavController) {
 
             val iconCredits = listOf(
 //
-                "App icon was designed by IconPai from Flaticon",
+                "App icon designed by IconsNova from Flaticon",
 
-                "App Screen image icons:",
-                "-No data Placeholder icon image designed by iconixar from Flaticon",
-                "-No Search data placeholder icon image designed by Robert Angle from Flaticon",
+                " In App Screen image icons:",
+                "-No data available Placeholder icon image designed by kerismaker from Flaticon",
 
                 )
 
@@ -117,7 +124,6 @@ fun CreditAuthorScreen(navController: NavController) {
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-
             // ✅ External link
             Text(
                 text = "Visit Flaticon: www.flaticon.com",
@@ -133,6 +139,20 @@ fun CreditAuthorScreen(navController: NavController) {
                     }
                     .padding(vertical = 4.dp)
             )
+
+            Text(
+                //set reminders,
+                text = "All icons, illustrations, animations, and other media" +
+                        " used in the app are sourced " +
+                        "from publicly available open-source or free-to-use repositories.  \n" +
+                        "The above attribution is in accordance with the original license agreements.  \n" +
+                        "The developer of this app does not claim ownership of these assets — " +
+                        "they belong to their respective owners.",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(bottom = 24.dp)
+            )
+
+
         }
     }
 }
@@ -142,5 +162,5 @@ fun CreditAuthorScreen(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 fun CreditAuthorScreenPreview() {
-    CreditAuthorScreen(navController = rememberNavController())
+    AboutAppScreen(navController = rememberNavController())
 }

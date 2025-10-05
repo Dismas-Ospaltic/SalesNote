@@ -10,16 +10,13 @@ import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import androidx.compose.animation.*
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.st11.salesnote.screens.CreditAuthorScreen
+import com.st11.salesnote.screens.AboutAppScreen
 import com.st11.salesnote.screens.HomeScreen
 import com.st11.salesnote.screens.ReportsScreen
 import com.st11.salesnote.screens.SettingScreen
 import com.st11.salesnote.screens.SingleSalesReportScreen
-import org.koin.androidx.compose.getViewModel
+
 
 sealed class Screen(val route: String) {
     object Home : Screen("home")
@@ -51,7 +48,7 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier) {
         composable(Screen.Home.route) { HomeScreen(navController) }
         composable(Screen.Settings.route) { SettingScreen(navController) }
         composable(Screen.Reports.route) { ReportsScreen(navController) }
-        composable(Screen.CreditAuthor.route) {  CreditAuthorScreen(navController)   }
+        composable(Screen.CreditAuthor.route) {  AboutAppScreen(navController)   }
 
         composable(Screen.SingleSalesReport.route) { backStackEntry ->
             val itemId = backStackEntry.arguments?.getString("itemId") ?: "Unknown"

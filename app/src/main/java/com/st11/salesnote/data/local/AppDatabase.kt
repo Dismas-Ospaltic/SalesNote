@@ -20,13 +20,13 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
-        fun getDatabase(context: Context): AppDatabase {
+        fun manageDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    AppDatabase::class.java,
-                    "sales_database"
-                ).fallbackToDestructiveMigration().build()
+                                context.applicationContext,
+                                AppDatabase::class.java,
+                                "sales_database"
+                            ).fallbackToDestructiveMigration(false).build()
                 INSTANCE = instance
                 instance
             }

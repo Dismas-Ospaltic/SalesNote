@@ -1,10 +1,7 @@
 package com.st11.salesnote.screens.components
 
-//
 
 
-
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -28,7 +26,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -41,10 +38,8 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import androidx.room.PrimaryKey
 import com.st11.salesnote.R
+import androidx.compose.ui.window.Dialog
 import com.st11.salesnote.model.SingleProductEntity
 import com.st11.salesnote.model.SingleSaleEntity
 import com.st11.salesnote.screens.NamePriceItem
@@ -52,186 +47,8 @@ import com.st11.salesnote.utils.formatDate
 import com.st11.salesnote.viewmodel.SingleProductSaleViewModel
 import com.st11.salesnote.viewmodel.SingleSaleViewModel
 import org.koin.androidx.compose.koinViewModel
+import androidx.compose.material3.*
 
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun AddSalePopUp(
-//    onDismiss: () -> Unit,
-//    total: Double,
-//    items: List<NamePriceItem>
-//) {
-//
-//    val backgroundColor = colorResource(id = R.color.raspberry)
-//
-//    var expanded by remember { mutableStateOf(false) }
-//    var salesDescription by remember { mutableStateOf("") }
-//    var paymentMethod by remember { mutableStateOf("" ) }
-//    var amountPaid by remember { mutableStateOf("") }
-//    var amountRemain by remember { mutableStateOf("") }
-//
-//
-//    val paymentMethodType = listOf(
-//        "Cash", "Bank", "M-pesa", "paypal"
-//    )
-//
-//
-//    // Automatically calculate change when amountPaid changes
-//    LaunchedEffect(amountPaid) {
-//        val paid = amountPaid.toDoubleOrNull() ?: 0.0
-//        val change = paid - total
-//        amountRemain = if (change >= 0) change.toString() else "0"
-//    }
-//
-//    Dialog(onDismissRequest = { onDismiss() }) {
-//        Surface(
-//            shape = RoundedCornerShape(16.dp),
-//            color = Color.White,
-//            tonalElevation = 8.dp,
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(16.dp)
-//        ) {
-//            Column(
-//                Modifier
-//                    .padding(16.dp)
-//                    .imePadding()
-//                    .verticalScroll(rememberScrollState()), // Adjust for keyboard
-//                verticalArrangement = Arrangement.spacedBy(12.dp)
-//
-//            ) {
-//                Text(text = "Complete Sales", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-//
-//                Text(text = "Total to Pay: $total", fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
-//
-//                items.forEachIndexed { index, item ->
-//                    Text("${index + 1}. ${item.name} - ${item.price}")
-//                }
-//
-//
-//
-//                ExposedDropdownMenuBox(
-//                    expanded = expanded,
-//                    onExpandedChange = { expanded = !expanded }
-//                ) {
-//                    OutlinedTextField(
-//                        value = paymentMethod,
-//                        onValueChange = {},
-//                        readOnly = true,
-//                        label = { Text("payment method *") },
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .menuAnchor(MenuAnchorType.PrimaryNotEditable),
-////                            .menuAnchor(),
-//                        trailingIcon = {
-//                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-//                        },
-//                        singleLine = true,
-//                        colors = OutlinedTextFieldDefaults.colors(
-//                            unfocusedContainerColor = Color.White.copy(alpha = 0.9f),
-//                            focusedContainerColor = Color.White.copy(alpha = 0.95f),
-//                            focusedBorderColor = backgroundColor,
-//                            unfocusedBorderColor = Color.Gray,
-//                            focusedLabelColor = backgroundColor,
-//                            cursorColor = backgroundColor
-//                        )
-//                    )
-//
-//                    ExposedDropdownMenu(
-//                        expanded = expanded,
-//                        onDismissRequest = { expanded = false },
-//                        modifier = Modifier
-//                            .background(Color.White) // ✅ White background for the dropdown menu
-//                    ) {
-//                        paymentMethodType.forEach { selectionOption ->
-//                            DropdownMenuItem(
-//                                text = { Text(selectionOption, color = Color.Black) }, // ✅ Black text
-//                                onClick = {
-//                                    paymentMethod = selectionOption
-//                                    expanded = false
-//                                }
-//                            )
-//                        }
-//                    }
-//                }
-//
-//
-//
-//                OutlinedTextField(
-//                    value = amountPaid,
-//                    onValueChange = { amountPaid = it },
-//                    label = { Text("Amount Paid") },
-//                    modifier = Modifier.fillMaxWidth(),
-//                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-//                    colors = OutlinedTextFieldDefaults.colors(
-//                        unfocusedContainerColor = Color.White.copy(alpha = 0.9f),
-//                        focusedContainerColor = Color.White.copy(alpha = 0.95f),
-//                        focusedBorderColor = backgroundColor,
-//                        unfocusedBorderColor = Color.Gray,
-//                        focusedLabelColor = backgroundColor,
-//                        cursorColor = backgroundColor
-//                    ),
-//                    singleLine = true
-//                )
-//
-//
-//                OutlinedTextField(
-//                    value = amountRemain,
-//                    onValueChange = { amountRemain = it },
-//                    label = { Text("Change") },
-//                    modifier = Modifier.fillMaxWidth(),
-//                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-//                    colors = OutlinedTextFieldDefaults.colors(
-//                        unfocusedContainerColor = Color.White.copy(alpha = 0.9f),
-//                        focusedContainerColor = Color.White.copy(alpha = 0.95f),
-//                        focusedBorderColor = backgroundColor,
-//                        unfocusedBorderColor = Color.Gray,
-//                        focusedLabelColor = backgroundColor,
-//                        cursorColor = backgroundColor
-//                    ),
-//                    singleLine = true
-//                )
-//
-//
-//                OutlinedTextField(
-//                    value = salesDescription,
-//                    onValueChange = { salesDescription = it },
-//                    label = { Text("short Notes") },
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .heightIn(min = 100.dp, max = 200.dp) // Adjust height for ~4 lines
-//                        .verticalScroll(rememberScrollState()),
-//
-//                    colors = OutlinedTextFieldDefaults.colors(
-//                        unfocusedContainerColor = Color.White.copy(alpha = 0.9f),
-//                        focusedContainerColor = Color.White.copy(alpha = 0.95f),
-//                        focusedBorderColor = backgroundColor,
-//                        unfocusedBorderColor = Color.Gray,
-//                        focusedLabelColor = backgroundColor,
-//                        cursorColor = backgroundColor
-//                    ),
-//                    singleLine = false,
-//                    maxLines = 4
-//                )
-//
-//                Row(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    horizontalArrangement = Arrangement.End
-//                ) {
-//                    TextButton(onClick = onDismiss) {
-//                        Text("Cancel")
-//                    }
-//                    Spacer(modifier = Modifier.width(8.dp))
-//                    Button(onClick = {
-//
-//
-//                    }) {
-//                        Text("Save")
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
 
 
 
@@ -240,44 +57,39 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun AddSalePopUp(
     onDismiss: () -> Unit,
+    onClearProducts: () -> Unit, // new callback
     total: Double,
     items: List<NamePriceItem>
 ) {
-    val backgroundColor = colorResource(id = R.color.raspberry)
+    val accentColor = colorResource(id = R.color.raspberry)
+
     var expanded by remember { mutableStateOf(false) }
     var salesDescription by remember { mutableStateOf("") }
     var paymentMethod by remember { mutableStateOf("") }
     var amountPaid by remember { mutableStateOf("") }
     var amountRemain by remember { mutableStateOf("") }
-    var totalSale by remember { mutableStateOf(0f) }
 
     val singleSaleViewModel: SingleSaleViewModel = koinViewModel()
     val singleProductSaleViewModel: SingleProductSaleViewModel = koinViewModel()
 
-
     val currentDate = remember { System.currentTimeMillis() }
     val formattedDate = formatDate(currentDate)
 
-    // Error states
     var paymentMethodError by remember { mutableStateOf(false) }
     var amountPaidError by remember { mutableStateOf(false) }
 
-    val paymentMethodType = listOf("Cash", "Bank", "M-pesa", "Paypal")
-
+    val paymentMethodType = listOf("Cash", "Bank", "M-pesa", "Paypal", "Vine", "Other")
     val idSales = generateTimestampBased10DigitNumber()
 
-    // Automatically calculate change when amountPaid changes
+    // Auto calculate change
     LaunchedEffect(amountPaid) {
         val paid = amountPaid.toDoubleOrNull() ?: 0.0
-        val change = paid - total
-        amountRemain = change.toString()
-//        totalSale =
-//        amountRemain = if (change >= 0) change.toString() else "0"
+        amountRemain = (paid - total).toString()
     }
 
     Dialog(onDismissRequest = { onDismiss() }) {
         Surface(
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(20.dp),
             color = Color.White,
             tonalElevation = 8.dp,
             modifier = Modifier
@@ -285,20 +97,40 @@ fun AddSalePopUp(
                 .padding(16.dp)
         ) {
             Column(
-                Modifier
-                    .padding(16.dp)
+                modifier = Modifier
+                    .padding(20.dp)
                     .imePadding()
                     .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Text(text = "Complete Sales", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                Text(text = "Total to Pay: $total", fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
+                // Title
+                Text(
+                    text = "Complete Sale",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = accentColor
+                )
+                Text(
+                    text = "Total to Pay: $total",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.DarkGray
+                )
 
+                // Items
+                Text(
+                    text = "Items Added",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold
+                )
                 items.forEachIndexed { index, item ->
-                    Text("${index + 1}. ${item.name} - ${item.price} :qty ${item.quantity}")
+                    Text(
+                        text = "${index + 1}. ${item.name} - ${item.price} : qty ${item.quantity}",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 }
 
-                // Payment Method Dropdown
+                // Payment method dropdown
                 ExposedDropdownMenuBox(
                     expanded = expanded,
                     onExpandedChange = { expanded = !expanded }
@@ -311,26 +143,24 @@ fun AddSalePopUp(
                         modifier = Modifier
                             .fillMaxWidth()
                             .menuAnchor(MenuAnchorType.PrimaryNotEditable),
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                        },
                         singleLine = true,
                         isError = paymentMethodError,
                         colors = OutlinedTextFieldDefaults.colors(
-                            unfocusedContainerColor = Color.White.copy(alpha = 0.9f),
-                            focusedContainerColor = Color.White.copy(alpha = 0.95f),
-                            focusedBorderColor = backgroundColor,
+                            focusedBorderColor = accentColor,
                             unfocusedBorderColor = Color.Gray,
-                            focusedLabelColor = backgroundColor,
-                            cursorColor = backgroundColor
+                            cursorColor = accentColor
                         )
                     )
                     ExposedDropdownMenu(
                         expanded = expanded,
-                        onDismissRequest = { expanded = false },
-                        modifier = Modifier.background(Color.White)
+                        onDismissRequest = { expanded = false }
                     ) {
                         paymentMethodType.forEach { selectionOption ->
                             DropdownMenuItem(
-                                text = { Text(selectionOption, color = Color.Black) },
+                                text = { Text(selectionOption) },
                                 onClick = {
                                     paymentMethod = selectionOption
                                     paymentMethodError = false
@@ -344,7 +174,7 @@ fun AddSalePopUp(
                     Text(
                         text = "Please select a payment method",
                         color = Color.Red,
-                        fontSize = 12.sp
+                        style = MaterialTheme.typography.labelSmall
                     )
                 }
 
@@ -360,12 +190,9 @@ fun AddSalePopUp(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     isError = amountPaidError,
                     colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.White.copy(alpha = 0.9f),
-                        focusedContainerColor = Color.White.copy(alpha = 0.95f),
-                        focusedBorderColor = backgroundColor,
+                        focusedBorderColor = accentColor,
                         unfocusedBorderColor = Color.Gray,
-                        focusedLabelColor = backgroundColor,
-                        cursorColor = backgroundColor
+                        cursorColor = accentColor
                     ),
                     singleLine = true
                 )
@@ -373,11 +200,11 @@ fun AddSalePopUp(
                     Text(
                         text = "Please enter a valid amount",
                         color = Color.Red,
-                        fontSize = 12.sp
+                        style = MaterialTheme.typography.labelSmall
                     )
                 }
 
-                // Change (Read-only)
+                // Change
                 OutlinedTextField(
                     value = amountRemain,
                     onValueChange = {},
@@ -385,96 +212,96 @@ fun AddSalePopUp(
                     label = { Text("Change") },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.White.copy(alpha = 0.9f),
-                        focusedContainerColor = Color.White.copy(alpha = 0.95f),
-                        focusedBorderColor = backgroundColor,
-                        unfocusedBorderColor = Color.Gray,
-                        focusedLabelColor = backgroundColor,
-                        cursorColor = backgroundColor
+                        focusedBorderColor = accentColor,
+                        unfocusedBorderColor = Color.Gray
                     ),
                     singleLine = true
                 )
 
                 // Notes
+                Text(
+                    text = "Add reference notes (optional)",
+                    color = Color.Gray,
+                    style = MaterialTheme.typography.labelMedium
+                )
                 OutlinedTextField(
                     value = salesDescription,
                     onValueChange = { salesDescription = it },
-                    label = { Text("Short Notes") },
+                    label = { Text("Reference Notes") },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(min = 100.dp, max = 200.dp)
-                        .verticalScroll(rememberScrollState()),
+                        .heightIn(min = 100.dp, max = 200.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.White.copy(alpha = 0.9f),
-                        focusedContainerColor = Color.White.copy(alpha = 0.95f),
-                        focusedBorderColor = backgroundColor,
+                        focusedBorderColor = accentColor,
                         unfocusedBorderColor = Color.Gray,
-                        focusedLabelColor = backgroundColor,
-                        cursorColor = backgroundColor
+                        cursorColor = accentColor
                     ),
                     singleLine = false,
                     maxLines = 4
                 )
 
-                // Action buttons
+                // Buttons
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    TextButton(onClick = onDismiss) { Text("Cancel") }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Button(onClick = {
-                        var valid = true
-                        if (paymentMethod.isBlank()) {
-                            paymentMethodError = true
-                            valid = false
-                        }
-                        if (amountPaid.toDoubleOrNull() == null) {
-                            amountPaidError = true
-                            valid = false
-                        }
-                        if (valid) {
-                            // Proceed with saving
-                          singleSaleViewModel.insertSingleSale(SingleSaleEntity(
-                              date = formattedDate,
-                              receipt = idSales.toString(),
-                              saleType =  paymentMethod,
-                              description = salesDescription,
-                              totalSale = total.toFloat(),
-                              totalPaid = amountPaid.toFloat(),
-                              change = amountRemain.toFloat(),
-
-                          ))
-
-
-                            items.forEachIndexed { index, item ->
-
-                      // Text("${index + 1}. ${item.name} - ${item.price} :qty ${item.quantity}")
-
-                                singleProductSaleViewModel.insertSingleProduct(
-                                    SingleProductEntity(
+                    OutlinedButton(
+                        onClick = onDismiss,
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text("Cancel")
+                    }
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Button(
+                        onClick = {
+                            var valid = true
+                            if (paymentMethod.isBlank()) {
+                                paymentMethodError = true
+                                valid = false
+                            }
+                            if (amountPaid.toDoubleOrNull() == null) {
+                                amountPaidError = true
+                                valid = false
+                            }
+                            if (valid) {
+                                singleSaleViewModel.insertSingleSale(
+                                    SingleSaleEntity(
                                         date = formattedDate,
                                         receipt = idSales.toString(),
-                                        productName = item.name,
-                                        price = item.price.toFloat(),
-                                        quantity = item.quantity.toInt(),
-                                        total = item.subTotal.toFloat(),
-                                        )
+                                        saleType = paymentMethod,
+                                        description = salesDescription,
+                                        totalSale = total.toFloat(),
+                                        totalPaid = amountPaid.toFloat(),
+                                        change = amountRemain.toFloat(),
+                                    )
                                 )
-
-
-
+                                items.forEachIndexed { _, item ->
+                                    singleProductSaleViewModel.insertSingleProduct(
+                                        SingleProductEntity(
+                                            date = formattedDate,
+                                            receipt = idSales.toString(),
+                                            productName = item.name,
+                                            price = item.price.toFloat(),
+                                            quantity = item.quantity.toInt(),
+                                            total = item.subTotal.toFloat()
+                                        )
+                                    )
+                                }
+                                onClearProducts()
+                                onDismiss()
                             }
-                            onDismiss()
-                        }
-                    }) {
-                        Text("Save")
+                        },
+                        shape = RoundedCornerShape(4.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = accentColor)
+                    ) {
+                        Text("Save", color = Color.White)
                     }
                 }
             }
         }
     }
 }
+
 
 
 fun generateTimestampBased10DigitNumber(): Long {

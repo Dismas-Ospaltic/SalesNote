@@ -1,11 +1,9 @@
 package com.st11.salesnote.viewmodel
 
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.st11.salesnote.model.DailySalesReport
-import com.st11.salesnote.model.SingleProductEntity
 import com.st11.salesnote.model.SingleSaleEntity
 import com.st11.salesnote.repository.SingleSaleRepository
 import kotlinx.coroutines.flow.MutableStateFlow

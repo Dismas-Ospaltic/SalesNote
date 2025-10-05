@@ -1,8 +1,6 @@
 package com.st11.salesnote
 
 
-
-
 import android.app.Application
 import com.st11.salesnote.di.appModule
 import org.koin.android.ext.koin.androidContext
